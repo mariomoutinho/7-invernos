@@ -41,7 +41,7 @@ No VS Code, abra `index.html` e clique em **Go Live** para usar a extensão Live
 
 ## Imagens e identidade visual
 
-A logo oficial, a busca e o menu ficam sobre o carrossel principal, logo abaixo da faixa de mensagens. Instagram e WhatsApp permanecem em uma pilha flutuante no canto inferior direito. As fotografias são usadas no carrossel principal e no carrossel responsivo da seção de orientação. Os arquivos enviados foram mantidos em `assets/images/originals`; a página carrega versões WebP menores em `assets/images/optimized` para preservar desempenho. O favicon também foi derivado da logo fornecida.
+A logo oficial fica centralizada sobre o carrossel principal, enquanto a busca e o menu permanecem no canto superior direito, logo abaixo da faixa de mensagens. Instagram e WhatsApp permanecem em uma pilha flutuante no canto inferior direito. As fotografias são usadas no carrossel principal e no carrossel responsivo da seção de orientação. Os arquivos enviados foram mantidos em `assets/images/originals`; a página carrega versões WebP menores em `assets/images/optimized` para preservar desempenho. O favicon também foi derivado da logo fornecida.
 
 Para trocar uma imagem, mantenha o original na pasta `originals`, gere uma versão otimizada e atualize o caminho correspondente em `index.html`. As cores da identidade ficam centralizadas nas variáveis do início de `css/styles.css`.
 

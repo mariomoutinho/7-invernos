@@ -760,11 +760,11 @@ body.menu-is-open {
 .hero-carousel-header {
   position: absolute;
   z-index: 7;
-  top: 1rem;
+  top: 0.875rem;
   left: 50%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   pointer-events: none;
   transform: translateX(-50%);
 }
@@ -791,10 +791,16 @@ body.menu-is-open {
 }
 
 .hero-carousel-logo {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 50%;
   display: block;
-  width: clamp(4rem, 18vw, 5.125rem);
+  width: clamp(4.5rem, 20vw, 5.5rem);
   height: auto;
-  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.35));
+  opacity: 0.84;
+  filter: drop-shadow(0 3px 7px rgba(0, 0, 0, 0.28));
+  transform: translateX(-50%);
 }
 
 .hero-carousel-logo img {
@@ -804,6 +810,7 @@ body.menu-is-open {
 }
 
 .hero-carousel-actions {
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 0.625rem;
@@ -1879,10 +1886,6 @@ body.menu-is-open {
 
   .js .hero-carousel-arrow {
     display: grid;
-  }
-
-  .hero-carousel-header {
-    top: 1.25rem;
   }
 
   .site-footer {
