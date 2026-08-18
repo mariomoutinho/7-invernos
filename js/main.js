@@ -82,7 +82,15 @@
   function setupContinuousMarquees() {
     const desktopHover = window.matchMedia("(hover: hover) and (pointer: fine)");
     document.querySelectorAll("[data-continuous-marquee]").forEach((marquee) => {
-      const resume = () => marquee.classList.remove("is-touching");
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let trackingTouch = false;
+
+      const resume = () => {
+        trackingTouch = false;
+        marquee.classList.remove("is-touching");
+      };
+
       marquee.addEventListener("pointerenter", (event) => {
         if (!desktopHover.matches || event.pointerType !== "mouse") return;
         marquee.classList.add("is-hovering");
@@ -93,10 +101,23 @@
       });
       marquee.addEventListener("pointerdown", (event) => {
         if (event.pointerType === "mouse") return;
-        marquee.classList.add("is-touching");
+        touchStartX = event.clientX;
+        touchStartY = event.clientY;
+        trackingTouch = true;
+      });
+      marquee.addEventListener("pointermove", (event) => {
+        if (!trackingTouch || event.pointerType === "mouse") return;
+        const horizontalDistance = Math.abs(event.clientX - touchStartX);
+        const verticalDistance = Math.abs(event.clientY - touchStartY);
+        if (horizontalDistance >= 8 && horizontalDistance > verticalDistance) {
+          marquee.classList.add("is-touching");
+        }
       });
       marquee.addEventListener("pointerup", resume);
       marquee.addEventListener("pointercancel", resume);
+      marquee.addEventListener("lostpointercapture", resume);
+      marquee.addEventListener("touchend", resume, { passive: true });
+      marquee.addEventListener("touchcancel", resume, { passive: true });
     });
   }
 
@@ -115,14 +136,15 @@
     const slideCount = contentSlides.length;
     let currentIndex = 0;
     let timer;
-    let resumeTimer;
     let userPaused = reducedMotion;
     let temporarilyPaused = false;
     let pointerInside = false;
     let focusInside = false;
     let inViewport = true;
     let dragStartX = 0;
-    let dragging = false;
+    let dragStartY = 0;
+    let trackingPointer = false;
+    let horizontalDragging = false;
 
     function createSlide(slide, index) {
       const article = document.createElement("figure");
@@ -177,7 +199,7 @@
       indicator.setAttribute("aria-label", `Ir para o destaque ${index + 1} de ${slideCount}`);
       indicator.addEventListener("click", () => {
         showSlide(index);
-        pauseForInteraction();
+        resumeAfterInteraction();
       });
       indicators.append(indicator);
     });
@@ -218,25 +240,20 @@
       }, 6500);
     }
 
-    function pauseForInteraction() {
+    function resumeAfterInteraction() {
       stopAutoplay();
-      window.clearTimeout(resumeTimer);
-      temporarilyPaused = true;
-      resumeTimer = window.setTimeout(() => {
-        temporarilyPaused = false;
-        scheduleAutoplay();
-      }, 12000);
+      temporarilyPaused = false;
+      scheduleAutoplay();
     }
 
     function beginPointerInteraction() {
       stopAutoplay();
-      window.clearTimeout(resumeTimer);
       temporarilyPaused = true;
     }
 
     function goManually(index) {
       showSlide(index);
-      pauseForInteraction();
+      resumeAfterInteraction();
     }
 
     previous.addEventListener("click", () => goManually(currentIndex - 1));
@@ -257,25 +274,51 @@
       if (event.pointerType === "mouse" && event.button !== 0) return;
       if (event.target.closest("a, button")) return;
       dragStartX = event.clientX;
-      dragging = true;
+      dragStartY = event.clientY;
+      trackingPointer = true;
+      horizontalDragging = false;
+    });
+    track.addEventListener("pointermove", (event) => {
+      if (!trackingPointer || horizontalDragging) return;
+      const horizontalDistance = Math.abs(event.clientX - dragStartX);
+      const verticalDistance = Math.abs(event.clientY - dragStartY);
+      if (horizontalDistance < 8 || horizontalDistance <= verticalDistance) return;
+      horizontalDragging = true;
       track.classList.add("is-dragging");
       beginPointerInteraction();
-      track.setPointerCapture(event.pointerId);
+      try {
+        track.setPointerCapture?.(event.pointerId);
+      } catch (_error) {
+        // O Safari pode cancelar o ponteiro ao decidir que o gesto pertence à rolagem da página.
+      }
     });
     track.addEventListener("pointerup", (event) => {
-      if (!dragging) return;
-      dragging = false;
+      if (!trackingPointer) return;
+      trackingPointer = false;
       track.classList.remove("is-dragging");
-      if (track.hasPointerCapture(event.pointerId)) track.releasePointerCapture(event.pointerId);
+      try {
+        if (track.hasPointerCapture?.(event.pointerId)) track.releasePointerCapture(event.pointerId);
+      } catch (_error) {
+        // A captura pode já ter sido liberada pelo navegador em dispositivos de toque.
+      }
       const distance = event.clientX - dragStartX;
-      if (Math.abs(distance) >= 45) showSlide(currentIndex + (distance < 0 ? 1 : -1));
-      pauseForInteraction();
+      if (horizontalDragging && Math.abs(distance) >= 45) showSlide(currentIndex + (distance < 0 ? 1 : -1));
+      horizontalDragging = false;
+      resumeAfterInteraction();
     });
     track.addEventListener("pointercancel", () => {
-      if (!dragging) return;
-      dragging = false;
+      if (!trackingPointer) return;
+      trackingPointer = false;
+      horizontalDragging = false;
       track.classList.remove("is-dragging");
-      pauseForInteraction();
+      resumeAfterInteraction();
+    });
+    track.addEventListener("lostpointercapture", () => {
+      if (!trackingPointer) return;
+      trackingPointer = false;
+      horizontalDragging = false;
+      track.classList.remove("is-dragging");
+      resumeAfterInteraction();
     });
 
     // Toques podem gerar eventos de mouse de compatibilidade sem um "leave" correspondente.
@@ -312,7 +355,6 @@
     toggle.addEventListener("click", () => {
       userPaused = !userPaused;
       temporarilyPaused = false;
-      window.clearTimeout(resumeTimer);
       updateToggle();
       scheduleAutoplay();
     });
