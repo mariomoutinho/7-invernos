@@ -6,7 +6,7 @@ Landing page comercial de página única para apresentar a 7 Invernos, explicar 
 
 - HTML5 semântico
 - CSS mobile-first, sem frameworks ou fontes externas
-- JavaScript puro para menu lateral, busca no conteúdo, links configuráveis e indicação da seção ativa
+- JavaScript puro para menu lateral acessível, busca no conteúdo, faixa rotativa, carrosséis, links configuráveis, animações sutis e indicação da seção ativa
 - Sem dependências, etapa de build ou serviços externos obrigatórios
 
 ## Estrutura
@@ -22,6 +22,7 @@ Landing page comercial de página única para apresentar a 7 Invernos, explicar 
 │   └── styles.css
 ├── js/
 │   ├── config.js
+│   ├── content.js
 │   └── main.js
 └── README.md
 ```
@@ -40,9 +41,11 @@ No VS Code, abra `index.html` e clique em **Go Live** para usar a extensão Live
 
 ## Imagens e identidade visual
 
-A logo oficial fica centralizada no cabeçalho e as fotografias são usadas no destaque e no mosaico da seção de orientação. Os arquivos enviados foram mantidos em `assets/images/originals`; a página carrega versões WebP menores em `assets/images/optimized` para preservar desempenho. O favicon também foi derivado da logo fornecida.
+A logo oficial, a busca e o menu ficam sobre o carrossel principal, logo abaixo da faixa de mensagens. Instagram e WhatsApp permanecem em uma pilha flutuante no canto inferior direito. As fotografias são usadas no carrossel principal e no carrossel responsivo da seção de orientação. Os arquivos enviados foram mantidos em `assets/images/originals`; a página carrega versões WebP menores em `assets/images/optimized` para preservar desempenho. O favicon também foi derivado da logo fornecida.
 
 Para trocar uma imagem, mantenha o original na pasta `originals`, gere uma versão otimizada e atualize o caminho correspondente em `index.html`. As cores da identidade ficam centralizadas nas variáveis do início de `css/styles.css`.
+
+As frases da faixa superior e o conteúdo dos slides principais ficam centralizados em `js/content.js`. Cada slide permite configurar imagem, dimensões, texto alternativo, enquadramento, textos e destino do botão sem alterar a lógica do componente.
 
 ## Dados que precisam ser substituídos
 
@@ -78,7 +81,7 @@ Nenhum endereço, horário, domínio, depoimento, preço ou regra comercial foi 
 
 ## Versão de produção e publicação
 
-Não há build. Depois de substituir e testar os dados comerciais, publique a pasta mantendo a mesma estrutura de arquivos em uma hospedagem de sites estáticos já contratada. Configure `index.html` como documento inicial e HTTPS na própria hospedagem.
+Não há build. Depois de substituir e testar os dados comerciais, publique a pasta mantendo a mesma estrutura de arquivos. Todos os caminhos são relativos e funcionam em subdiretórios do GitHub Pages; `index.html` é o documento inicial.
 
 Antes de publicar:
 
