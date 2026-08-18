@@ -35,7 +35,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 6.5rem;
+  scroll-padding-top: 72px;
 }
 
 body {
@@ -300,22 +300,20 @@ p:last-child {
 }
 
 .menu-button,
-.hero-carousel-search {
+.site-header-search {
   width: 2.75rem;
   height: 2.75rem;
   place-content: center;
   padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.24);
+  border: 1px solid rgba(40, 86, 110, 0.24);
   border-radius: 50%;
-  color: #fff;
-  background: rgba(15, 44, 57, 0.72);
-  box-shadow: 0 7px 20px rgba(5, 21, 29, 0.18);
+  color: var(--color-primary-strong);
+  background: rgba(255, 255, 255, 0.24);
   cursor: pointer;
   transition:
     background-color var(--transition),
     border-color var(--transition),
     transform var(--transition);
-  backdrop-filter: blur(6px);
 }
 
 .menu-button {
@@ -323,18 +321,18 @@ p:last-child {
   gap: 5px;
 }
 
-.hero-carousel-search {
+.site-header-search {
   display: none;
 }
 
 .menu-button:hover,
-.hero-carousel-search:hover {
-  border-color: rgba(255, 255, 255, 0.42);
-  background: rgba(15, 44, 57, 0.9);
+.site-header-search:hover {
+  border-color: rgba(40, 86, 110, 0.42);
+  background: rgba(255, 255, 255, 0.58);
   transform: translateY(-1px);
 }
 
-.hero-carousel-search svg {
+.site-header-search svg {
   width: 1.35rem;
   height: 1.35rem;
   fill: none;
@@ -549,6 +547,43 @@ p:last-child {
   stroke: none;
 }
 
+.site-header {
+  position: sticky;
+  z-index: 50;
+  top: 0;
+  height: 3.875rem;
+  border-top: 1px solid rgba(0, 127, 169, 0.38);
+  border-bottom: 1px solid rgba(0, 127, 169, 0.38);
+  background: #dceff5;
+  box-shadow: 0 5px 14px rgba(24, 60, 78, 0.1);
+}
+
+.site-header-inner {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-header-logo {
+  display: block;
+  width: clamp(3rem, 13vw, 3.25rem);
+  height: auto;
+  flex: 0 0 auto;
+}
+
+.site-header-logo img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.site-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .js .site-navigation {
   position: fixed;
   z-index: 310;
@@ -573,7 +608,7 @@ p:last-child {
 }
 
 .js .menu-button,
-.js .hero-carousel-search {
+.js .site-header-search {
   display: grid;
 }
 
@@ -755,65 +790,6 @@ body.menu-is-open {
   color: #fff;
   background: var(--color-primary-strong);
   touch-action: pan-y;
-}
-
-.hero-carousel-header {
-  position: absolute;
-  z-index: 7;
-  top: 0.875rem;
-  left: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  pointer-events: none;
-  transform: translateX(-50%);
-}
-
-.hero-carousel-top-shade {
-  position: absolute;
-  z-index: 6;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 9rem;
-  background: linear-gradient(
-    to bottom,
-    rgba(5, 25, 34, 0.48) 0%,
-    rgba(5, 25, 34, 0.18) 55%,
-    transparent 100%
-  );
-  pointer-events: none;
-}
-
-.hero-carousel-logo,
-.hero-carousel-actions {
-  pointer-events: auto;
-}
-
-.hero-carousel-logo {
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  left: 50%;
-  display: block;
-  width: clamp(4.5rem, 20vw, 5.5rem);
-  height: auto;
-  opacity: 0.84;
-  filter: drop-shadow(0 3px 7px rgba(0, 0, 0, 0.28));
-  transform: translateX(-50%);
-}
-
-.hero-carousel-logo img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-}
-
-.hero-carousel-actions {
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
 }
 
 .hero-carousel-track,

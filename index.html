@@ -13,10 +13,10 @@
       document.documentElement.classList.add("js");
     </script>
     <link rel="icon" type="image/png" sizes="64x64" href="assets/images/optimized/favicon-64.png">
-    <link rel="stylesheet" href="css/styles.css?v=7">
+    <link rel="stylesheet" href="css/styles.css?v=8">
     <script src="js/config.js?v=3" defer></script>
     <script src="js/content.js?v=1" defer></script>
-    <script src="js/main.js?v=5" defer></script>
+    <script src="js/main.js?v=6" defer></script>
   </head>
 
   <body>
@@ -25,6 +25,42 @@
     <aside class="announcement-bar" aria-label="Informações da 7 Invernos" data-announcement-bar>
       <p data-announcement-text>Viaje leve. A gente cuida do frio.</p>
     </aside>
+
+    <header class="site-header">
+      <div class="container site-header-inner">
+        <a class="site-header-logo" href="#inicio" aria-label="7 Invernos — voltar ao início">
+          <img
+            src="assets/images/optimized/logo-7-invernos.webp"
+            width="240"
+            height="222"
+            alt="7 Invernos"
+          >
+        </a>
+        <div class="site-header-actions">
+          <button
+            class="site-header-search"
+            type="button"
+            aria-haspopup="dialog"
+            aria-label="Pesquisar"
+            data-search-button
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4.2 4.2" /></svg>
+          </button>
+          <button
+            class="menu-button"
+            type="button"
+            aria-expanded="false"
+            aria-controls="site-navigation"
+            aria-label="Abrir menu"
+            data-menu-button
+          >
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+    </header>
 
     <nav class="site-navigation" id="site-navigation" aria-label="Navegação principal" data-navigation>
           <div class="mobile-navigation-header">
@@ -95,41 +131,6 @@
           aria-label="Destaques de roupas e viagens"
           data-hero-carousel
         >
-          <div class="hero-carousel-top-shade" aria-hidden="true"></div>
-          <div class="container hero-carousel-header">
-            <a class="hero-carousel-logo" href="#inicio" aria-label="7 Invernos — voltar ao início">
-              <img
-                src="assets/images/optimized/logo-7-invernos.webp"
-                width="240"
-                height="222"
-                alt="7 Invernos"
-              >
-            </a>
-            <div class="hero-carousel-actions">
-              <button
-                class="hero-carousel-search"
-                type="button"
-                aria-haspopup="dialog"
-                aria-label="Pesquisar"
-                data-search-button
-              >
-                <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4.2 4.2" /></svg>
-              </button>
-              <button
-                class="menu-button hero-carousel-menu"
-                type="button"
-                aria-expanded="false"
-                aria-controls="site-navigation"
-                aria-label="Abrir menu"
-                data-menu-button
-              >
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-              </button>
-            </div>
-          </div>
-
           <div class="hero-carousel-track" data-hero-track>
             <figure
               class="hero-carousel-slide is-active"

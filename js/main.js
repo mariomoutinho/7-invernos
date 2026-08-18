@@ -77,6 +77,7 @@
     if (!carousel || !track || !previous || !next || !indicators || !toggle || !contentSlides.length) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const desktopHover = window.matchMedia("(hover: hover) and (pointer: fine)");
     const slideCount = contentSlides.length;
     let currentIndex = 0;
     let timer;
@@ -193,6 +194,12 @@
       }, 12000);
     }
 
+    function beginPointerInteraction() {
+      stopAutoplay();
+      window.clearTimeout(resumeTimer);
+      temporarilyPaused = true;
+    }
+
     function goManually(index) {
       showSlide(index);
       pauseForInteraction();
@@ -214,9 +221,11 @@
 
     track.addEventListener("pointerdown", (event) => {
       if (event.pointerType === "mouse" && event.button !== 0) return;
+      if (event.target.closest("a, button")) return;
       dragStartX = event.clientX;
       dragging = true;
       track.classList.add("is-dragging");
+      beginPointerInteraction();
       track.setPointerCapture(event.pointerId);
     });
     track.addEventListener("pointerup", (event) => {
@@ -225,31 +234,46 @@
       track.classList.remove("is-dragging");
       if (track.hasPointerCapture(event.pointerId)) track.releasePointerCapture(event.pointerId);
       const distance = event.clientX - dragStartX;
-      if (Math.abs(distance) >= 45) goManually(currentIndex + (distance < 0 ? 1 : -1));
+      if (Math.abs(distance) >= 45) showSlide(currentIndex + (distance < 0 ? 1 : -1));
+      pauseForInteraction();
     });
     track.addEventListener("pointercancel", () => {
+      if (!dragging) return;
       dragging = false;
       track.classList.remove("is-dragging");
+      pauseForInteraction();
     });
 
-    carousel.addEventListener("mouseenter", () => {
+    // Toques podem gerar eventos de mouse de compatibilidade sem um "leave" correspondente.
+    // Por isso, a pausa por hover só responde a um ponteiro de mouse realmente capaz de hover.
+    carousel.addEventListener("pointerenter", (event) => {
+      if (!desktopHover.matches || event.pointerType !== "mouse") return;
       pointerInside = true;
       stopAutoplay();
     });
-    carousel.addEventListener("mouseleave", () => {
+    carousel.addEventListener("pointerleave", (event) => {
+      if (!desktopHover.matches || event.pointerType !== "mouse") return;
       pointerInside = false;
       scheduleAutoplay();
     });
-    carousel.addEventListener("focusin", () => {
-      focusInside = true;
-      stopAutoplay();
+    carousel.addEventListener("focusin", (event) => {
+      focusInside = event.target.matches(":focus-visible");
+      if (focusInside) stopAutoplay();
     });
     carousel.addEventListener("focusout", () => {
       window.setTimeout(() => {
-        focusInside = carousel.contains(document.activeElement);
+        focusInside = carousel.contains(document.activeElement) && document.activeElement.matches(":focus-visible");
         scheduleAutoplay();
       }, 0);
     });
+
+    const resetHoverState = () => {
+      if (desktopHover.matches) return;
+      pointerInside = false;
+      scheduleAutoplay();
+    };
+    if (typeof desktopHover.addEventListener === "function") desktopHover.addEventListener("change", resetHoverState);
+    else desktopHover.addListener(resetHoverState);
 
     toggle.addEventListener("click", () => {
       userPaused = !userPaused;
