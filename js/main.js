@@ -3,7 +3,14 @@
 
   const config = window.SITE_CONFIG || {};
   const menuButton = document.querySelector("[data-menu-button]");
+  const menuOverlay = document.querySelector("[data-menu-overlay]");
   const navigation = document.querySelector("[data-navigation]");
+  const searchButton = document.querySelector("[data-search-button]");
+  const searchDialog = document.querySelector("[data-search-dialog]");
+  const searchClose = document.querySelector("[data-search-close]");
+  const searchInput = document.querySelector("[data-search-input]");
+  const searchStatus = document.querySelector("[data-search-status]");
+  const searchResults = document.querySelector("[data-search-results]");
   const toast = document.querySelector("[data-toast]");
   const address = document.querySelector("[data-address]");
   const pendingNote = document.querySelector("#pending-contacts");
@@ -67,6 +74,8 @@
     menuButton.setAttribute("aria-expanded", "false");
     menuButton.setAttribute("aria-label", "Abrir menu");
     navigation.classList.remove("is-open");
+    menuOverlay?.classList.remove("is-open");
+    document.body.classList.remove("menu-is-open");
 
     if (returnFocus) menuButton.focus();
   }
@@ -79,7 +88,11 @@
       menuButton.setAttribute("aria-expanded", String(willOpen));
       menuButton.setAttribute("aria-label", willOpen ? "Fechar menu" : "Abrir menu");
       navigation.classList.toggle("is-open", willOpen);
+      menuOverlay?.classList.toggle("is-open", willOpen);
+      document.body.classList.toggle("menu-is-open", willOpen);
     });
+
+    menuOverlay?.addEventListener("click", () => closeMenu({ returnFocus: true }));
 
     navigation.querySelectorAll("a").forEach((link) => {
       link.addEventListener("click", () => closeMenu());
@@ -91,9 +104,82 @@
       }
     });
 
-    window.matchMedia("(min-width: 800px)").addEventListener("change", (event) => {
-      if (event.matches) closeMenu();
+  }
+
+  function normalizeText(value) {
+    return value
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function setupSiteSearch() {
+    if (!searchButton || !searchDialog || !searchInput || !searchStatus || !searchResults) return;
+
+    const sections = Array.from(document.querySelectorAll("main > section[data-search-title]")).map((section) => {
+      const description = section.querySelector("p:not(.eyebrow)")?.textContent.trim() || "";
+      return {
+        id: section.id,
+        title: section.dataset.searchTitle,
+        description,
+        searchableText: normalizeText(
+          `${section.dataset.searchTitle} ${section.dataset.searchKeywords || ""} ${section.textContent}`,
+        ),
+      };
     });
+
+    function renderResults() {
+      const query = normalizeText(searchInput.value);
+      searchResults.replaceChildren();
+
+      if (query.length < 2) {
+        searchStatus.textContent = "Digite pelo menos dois caracteres para começar.";
+        return;
+      }
+
+      const terms = query.split(" ").filter(Boolean);
+      const matches = sections.filter((section) => terms.every((term) => section.searchableText.includes(term)));
+
+      searchStatus.textContent = matches.length
+        ? `${matches.length} ${matches.length === 1 ? "resultado encontrado" : "resultados encontrados"}.`
+        : "Nenhum conteúdo encontrado. Tente buscar por aluguel, destino, atendimento ou localização.";
+
+      matches.forEach((match) => {
+        const item = document.createElement("li");
+        const link = document.createElement("a");
+        const title = document.createElement("strong");
+        const description = document.createElement("small");
+
+        link.href = `#${match.id}`;
+        title.textContent = match.title;
+        description.textContent =
+          match.description.length > 135 ? `${match.description.slice(0, 132).trim()}…` : match.description;
+
+        link.append(title, description);
+        link.addEventListener("click", () => searchDialog.close());
+        item.append(link);
+        searchResults.append(item);
+      });
+    }
+
+    searchButton.addEventListener("click", () => {
+      closeMenu();
+      searchInput.value = "";
+      renderResults();
+
+      if (typeof searchDialog.showModal === "function") searchDialog.showModal();
+      else searchDialog.setAttribute("open", "");
+
+      window.setTimeout(() => searchInput.focus(), 0);
+    });
+
+    searchClose?.addEventListener("click", () => searchDialog.close());
+    searchDialog.addEventListener("click", (event) => {
+      if (event.target === searchDialog) searchDialog.close();
+    });
+    searchInput.addEventListener("input", renderResults);
   }
 
   function setupActiveNavigation() {
@@ -134,5 +220,6 @@
 
   configureCommercialLinks();
   setupMobileMenu();
+  setupSiteSearch();
   setupActiveNavigation();
 })();

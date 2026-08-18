@@ -6,7 +6,7 @@ Landing page comercial de página única para apresentar a 7 Invernos, explicar 
 
 - HTML5 semântico
 - CSS mobile-first, sem frameworks ou fontes externas
-- JavaScript puro para menu mobile, links configuráveis e indicação da seção ativa
+- JavaScript puro para menu lateral, busca no conteúdo, links configuráveis e indicação da seção ativa
 - Sem dependências, etapa de build ou serviços externos obrigatórios
 
 ## Estrutura
@@ -14,6 +14,10 @@ Landing page comercial de página única para apresentar a 7 Invernos, explicar 
 ```text
 7-invernos/
 ├── index.html
+├── assets/
+│   └── images/
+│       ├── originals/   # arquivos recebidos, preservados sem alteração
+│       └── optimized/   # WebP e favicon usados pela página
 ├── css/
 │   └── styles.css
 ├── js/
@@ -31,6 +35,14 @@ python3 -m http.server 8080
 ```
 
 Depois, acesse `http://localhost:8080`. Também é possível abrir `index.html` diretamente no navegador, mas o servidor local representa melhor uma hospedagem real.
+
+No VS Code, abra `index.html` e clique em **Go Live** para usar a extensão Live Server já instalada.
+
+## Imagens e identidade visual
+
+A logo oficial fica centralizada no cabeçalho e as fotografias são usadas no destaque e no mosaico da seção de orientação. Os arquivos enviados foram mantidos em `assets/images/originals`; a página carrega versões WebP menores em `assets/images/optimized` para preservar desempenho. O favicon também foi derivado da logo fornecida.
+
+Para trocar uma imagem, mantenha o original na pasta `originals`, gere uma versão otimizada e atualize o caminho correspondente em `index.html`. As cores da identidade ficam centralizadas nas variáveis do início de `css/styles.css`.
 
 ## Dados que precisam ser substituídos
 
@@ -58,13 +70,11 @@ Obrigatórios antes da publicação:
 
 Opcionais, caso existam e estejam autorizados:
 
-- logotipo oficial e favicon derivado da identidade existente;
-- fotografias reais da empresa;
 - horário de atendimento;
 - avaliações autorizadas;
 - domínio final, necessário para URL canônica e para decidir a criação de `robots.txt` e `sitemap.xml`.
 
-Nenhum endereço, horário, domínio, depoimento, preço ou regra comercial foi inventado. A composição visual atual é abstrata e as cores estão centralizadas nas variáveis do início de `css/styles.css` para facilitar uma futura adequação à identidade oficial.
+Nenhum endereço, horário, domínio, depoimento, preço ou regra comercial foi inventado.
 
 ## Versão de produção e publicação
 
@@ -79,4 +89,4 @@ Antes de publicar:
 
 ## Recursos deliberadamente excluídos
 
-Conforme o escopo Lite, não foram incluídos catálogo, filtros, busca, páginas de produtos, formulários, reservas, pagamentos, carrinho, estoque, login, CMS, banco de dados, analytics, chatbot, APIs, tradução ou qualquer painel administrativo.
+Conforme o escopo Lite, não foram incluídos catálogo, filtros, busca de produtos, páginas de produtos, formulários de contato, reservas, pagamentos, carrinho, estoque, login, CMS, banco de dados, analytics, chatbot, APIs, tradução ou qualquer painel administrativo. A busca existente consulta somente os textos institucionais desta página.
