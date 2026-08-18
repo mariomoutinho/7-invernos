@@ -31,39 +31,73 @@
 
   function setupAnnouncementBar() {
     const bar = document.querySelector("[data-announcement-bar]");
-    const text = bar?.querySelector("[data-announcement-text]");
+    const track = bar?.querySelector("[data-marquee-track]");
+    const group = bar?.querySelector("[data-announcement-group]");
     const messages = Array.isArray(siteContent.announcements) ? siteContent.announcements.filter(Boolean) : [];
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!bar || !text || !messages.length) return;
+    if (!bar || !track || !group || !messages.length) return;
 
-    let currentIndex = 0;
-    let timer;
-    text.textContent = messages[0];
-
-    function stop() {
-      window.clearTimeout(timer);
+    function fillGroup(target) {
+      const items = [];
+      messages.forEach((message) => {
+        const text = document.createElement("span");
+        const divider = document.createElement("span");
+        text.className = "announcement-message";
+        text.textContent = message;
+        divider.className = "announcement-divider";
+        divider.setAttribute("aria-hidden", "true");
+        divider.textContent = "❄";
+        items.push(text, divider);
+      });
+      target.replaceChildren(...items);
     }
 
-    function schedule() {
-      stop();
-      if (reducedMotion || document.hidden || messages.length < 2) return;
-      timer = window.setTimeout(() => {
-        text.classList.add("is-changing");
-        window.setTimeout(() => {
-          currentIndex = (currentIndex + 1) % messages.length;
-          text.textContent = messages[currentIndex];
-          text.classList.remove("is-changing");
-          schedule();
-        }, 220);
-      }, 5200);
-    }
+    fillGroup(group);
+    const clone = group.cloneNode(true);
+    clone.removeAttribute("data-announcement-group");
+    clone.dataset.marqueeCopy = "";
+    clone.setAttribute("aria-hidden", "true");
+    track.append(clone);
+    bar.classList.add("is-ready");
+  }
 
-    bar.addEventListener("mouseenter", stop);
-    bar.addEventListener("mouseleave", schedule);
-    bar.addEventListener("focusin", stop);
-    bar.addEventListener("focusout", schedule);
-    document.addEventListener("visibilitychange", () => (document.hidden ? stop() : schedule()));
-    schedule();
+  function setupCategoryMarquee() {
+    const marquee = document.querySelector("[data-category-marquee]");
+    const track = marquee?.querySelector("[data-marquee-track]");
+    const list = marquee?.querySelector("[data-category-list]");
+    if (!marquee || !track || !list) return;
+
+    for (let index = 0; index < 2; index += 1) {
+      const clone = list.cloneNode(true);
+      clone.removeAttribute("data-category-list");
+      clone.dataset.marqueeCopy = "";
+      clone.setAttribute("aria-hidden", "true");
+      clone.querySelectorAll("img").forEach((image) => {
+        image.alt = "";
+      });
+      track.append(clone);
+    }
+    marquee.classList.add("is-ready");
+  }
+
+  function setupContinuousMarquees() {
+    const desktopHover = window.matchMedia("(hover: hover) and (pointer: fine)");
+    document.querySelectorAll("[data-continuous-marquee]").forEach((marquee) => {
+      const resume = () => marquee.classList.remove("is-touching");
+      marquee.addEventListener("pointerenter", (event) => {
+        if (!desktopHover.matches || event.pointerType !== "mouse") return;
+        marquee.classList.add("is-hovering");
+      });
+      marquee.addEventListener("pointerleave", (event) => {
+        if (event.pointerType === "mouse") marquee.classList.remove("is-hovering");
+        resume();
+      });
+      marquee.addEventListener("pointerdown", (event) => {
+        if (event.pointerType === "mouse") return;
+        marquee.classList.add("is-touching");
+      });
+      marquee.addEventListener("pointerup", resume);
+      marquee.addEventListener("pointercancel", resume);
+    });
   }
 
   function setupHeroCarousel() {
@@ -657,6 +691,8 @@
   });
 
   setupAnnouncementBar();
+  setupCategoryMarquee();
+  setupContinuousMarquees();
   setupHeroCarousel();
   configureCommercialLinks();
   setupMobileMenu();

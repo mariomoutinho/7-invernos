@@ -6,7 +6,7 @@ Landing page comercial de página única para apresentar a 7 Invernos, explicar 
 
 - HTML5 semântico
 - CSS mobile-first, sem frameworks ou fontes externas
-- JavaScript puro para menu lateral acessível, busca no conteúdo, faixa rotativa, carrosséis, links configuráveis, animações sutis e indicação da seção ativa
+- JavaScript puro para menu lateral acessível, busca no conteúdo, carrosséis, links configuráveis, animações sutis e indicação da seção ativa
 - Sem dependências, etapa de build ou serviços externos obrigatórios
 
 ## Estrutura
@@ -41,11 +41,11 @@ No VS Code, abra `index.html` e clique em **Go Live** para usar a extensão Live
 
 ## Imagens e identidade visual
 
-A logo oficial fica à esquerda na barra azul-clara fixa durante a rolagem, enquanto a busca e o menu permanecem à direita. A faixa de mensagens acima dela continua no fluxo normal da página. Instagram e WhatsApp permanecem em uma pilha flutuante no canto inferior direito. As fotografias são usadas no carrossel principal e no carrossel responsivo da seção de orientação. Os arquivos enviados foram mantidos em `assets/images/originals`; a página carrega versões WebP menores em `assets/images/optimized` para preservar desempenho. O favicon também foi derivado da logo fornecida.
+A logo oficial fica à esquerda na barra azul-clara fixa durante a rolagem, enquanto a busca e o menu permanecem à direita. A faixa de mensagens acima dela percorre a tela continuamente da direita para a esquerda. Logo depois das fotografias, o carrossel “Complete seu look” apresenta as categorias de peças no mesmo sentido. Instagram e WhatsApp permanecem em uma pilha flutuante no canto inferior direito. As fotografias são usadas no carrossel principal e no carrossel responsivo da seção de orientação. Os arquivos enviados foram mantidos em `assets/images/originals`; a página carrega versões WebP menores em `assets/images/optimized` para preservar desempenho e transparência. O favicon também foi derivado da logo fornecida.
 
 Para trocar uma imagem, mantenha o original na pasta `originals`, gere uma versão otimizada e atualize o caminho correspondente em `index.html`. As cores da identidade ficam centralizadas nas variáveis do início de `css/styles.css`.
 
-As frases da faixa superior e o conteúdo dos slides principais ficam centralizados em `js/content.js`. Cada slide permite configurar imagem, dimensões, texto alternativo, enquadramento, textos e destino do botão sem alterar a lógica do componente.
+As frases da faixa superior e o conteúdo dos slides principais ficam centralizados em `js/content.js`. Cada slide permite configurar imagem, dimensões, texto alternativo, enquadramento, textos e destino do botão sem alterar a lógica do componente. Os loops contínuos usam animações CSS lineares de 24 segundos para as frases e 30 segundos para as categorias, com cópias visuais ocultas de tecnologias assistivas e interrupção automática quando o sistema solicita movimento reduzido.
 
 ## Dados que precisam ser substituídos
 
