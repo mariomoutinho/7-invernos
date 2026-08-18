@@ -220,7 +220,8 @@ p:last-child {
 
 [data-continuous-marquee].is-hovering [data-marquee-track],
 [data-continuous-marquee].is-touching [data-marquee-track],
-[data-continuous-marquee]:focus-within [data-marquee-track] {
+[data-continuous-marquee]:focus-within [data-marquee-track],
+.motion-paused [data-continuous-marquee] [data-marquee-track] {
   animation-play-state: paused !important;
 }
 
@@ -328,7 +329,8 @@ p:last-child {
 }
 
 .menu-button,
-.site-header-search {
+.site-header-search,
+.motion-control {
   width: 2.75rem;
   height: 2.75rem;
   place-content: center;
@@ -353,14 +355,20 @@ p:last-child {
   display: none;
 }
 
+.motion-control {
+  display: none;
+}
+
 .menu-button:hover,
-.site-header-search:hover {
+.site-header-search:hover,
+.motion-control:hover {
   border-color: rgba(40, 86, 110, 0.42);
   background: rgba(255, 255, 255, 0.58);
   transform: translateY(-1px);
 }
 
-.site-header-search svg {
+.site-header-search svg,
+.motion-control svg {
   width: 1.35rem;
   height: 1.35rem;
   fill: none;
@@ -368,6 +376,15 @@ p:last-child {
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 1.8;
+}
+
+.motion-control .motion-play-icon,
+.motion-control[aria-pressed="true"] .motion-pause-icon {
+  display: none;
+}
+
+.motion-control[aria-pressed="true"] .motion-play-icon {
+  display: block;
 }
 
 .menu-button span {
@@ -636,7 +653,8 @@ p:last-child {
 }
 
 .js .menu-button,
-.js .site-header-search {
+.js .site-header-search,
+.js .motion-control {
   display: grid;
 }
 
@@ -2101,26 +2119,13 @@ body.menu-is-open {
     transform: none;
   }
 
-  [data-marquee-track] {
-    animation: none !important;
-    transform: none !important;
-    will-change: auto;
+  .hero-carousel-slide {
+    transition: opacity 300ms ease !important;
   }
 
-  [data-marquee-copy] {
-    display: none !important;
-  }
-
-  .announcement-bar,
-  .category-marquee {
-    overflow-x: auto;
-  }
-
-  .category-marquee-track {
-    min-width: 100%;
-  }
-
-  .category-list {
-    margin-inline: auto;
+  .hero-carousel-content,
+  .hero-carousel-slide.is-active .hero-carousel-content {
+    transform: none;
+    transition: opacity 220ms ease !important;
   }
 }

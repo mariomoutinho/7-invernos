@@ -13,10 +13,10 @@
       document.documentElement.classList.add("js");
     </script>
     <link rel="icon" type="image/png" sizes="64x64" href="assets/images/optimized/favicon-64.png">
-    <link rel="stylesheet" href="css/styles.css?v=9">
+    <link rel="stylesheet" href="css/styles.css?v=10">
     <script src="js/config.js?v=3" defer></script>
-    <script src="js/content.js?v=1" defer></script>
-    <script src="js/main.js?v=8" defer></script>
+    <script src="js/content.js?v=10" defer></script>
+    <script src="js/main.js?v=10" defer></script>
   </head>
 
   <body>
@@ -46,6 +46,17 @@
           >
         </a>
         <div class="site-header-actions">
+          <button
+            class="motion-control"
+            type="button"
+            aria-label="Pausar animações"
+            aria-pressed="false"
+            title="Pausar animações"
+            data-motion-toggle
+          >
+            <svg class="motion-pause-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" /></svg>
+            <svg class="motion-play-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7Z" /></svg>
+          </button>
           <button
             class="site-header-search"
             type="button"

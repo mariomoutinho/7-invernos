@@ -17,8 +17,51 @@
   const address = document.querySelector("[data-address]");
   const pendingNote = document.querySelector("#pending-contacts");
   const floatingWhatsApp = document.querySelector("[data-floating-whatsapp]");
+  const motionToggle = document.querySelector("[data-motion-toggle]");
+  const motionStorageKey = "7-invernos-motion-paused";
   let toastTimer;
   let lastSearchTrigger;
+  let allMotionPaused = readStoredMotionPreference();
+
+  document.documentElement.classList.toggle("motion-paused", allMotionPaused);
+
+  function readStoredMotionPreference() {
+    try {
+      return window.localStorage.getItem(motionStorageKey) === "true";
+    } catch (_error) {
+      return false;
+    }
+  }
+
+  function storeMotionPreference(isPaused) {
+    try {
+      window.localStorage.setItem(motionStorageKey, String(isPaused));
+    } catch (_error) {
+      // O controle continua funcionando quando o navegador bloqueia o armazenamento local.
+    }
+  }
+
+  function updateMotionControl() {
+    if (!motionToggle) return;
+    const label = allMotionPaused ? "Ativar animações" : "Pausar animações";
+    motionToggle.setAttribute("aria-label", label);
+    motionToggle.setAttribute("aria-pressed", String(allMotionPaused));
+    motionToggle.title = label;
+  }
+
+  function setAllMotionPaused(isPaused, { persist = true } = {}) {
+    allMotionPaused = isPaused;
+    document.documentElement.classList.toggle("motion-paused", allMotionPaused);
+    updateMotionControl();
+    if (persist) storeMotionPreference(allMotionPaused);
+    document.dispatchEvent(new CustomEvent("site-motion-change", { detail: { paused: allMotionPaused } }));
+  }
+
+  function setupMotionControl() {
+    if (!motionToggle) return;
+    updateMotionControl();
+    motionToggle.addEventListener("click", () => setAllMotionPaused(!allMotionPaused));
+  }
 
   const isConfigured = (value) =>
     typeof value === "string" && value.trim() !== "" && !value.startsWith("INSERIR_");
@@ -118,6 +161,9 @@
       marquee.addEventListener("lostpointercapture", resume);
       marquee.addEventListener("touchend", resume, { passive: true });
       marquee.addEventListener("touchcancel", resume, { passive: true });
+      document.addEventListener("pointerup", resume, { passive: true });
+      document.addEventListener("pointercancel", resume, { passive: true });
+      window.addEventListener("blur", resume);
     });
   }
 
@@ -131,12 +177,11 @@
     const contentSlides = Array.isArray(siteContent.heroSlides) ? siteContent.heroSlides : [];
     if (!carousel || !track || !previous || !next || !indicators || !toggle || !contentSlides.length) return;
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const desktopHover = window.matchMedia("(hover: hover) and (pointer: fine)");
     const slideCount = contentSlides.length;
     let currentIndex = 0;
     let timer;
-    let userPaused = reducedMotion;
+    let userPaused = false;
     let temporarilyPaused = false;
     let pointerInside = false;
     let focusInside = false;
@@ -228,7 +273,7 @@
     }
 
     function canAutoplay() {
-      return !userPaused && !temporarilyPaused && !pointerInside && !focusInside && inViewport && !document.hidden;
+      return !allMotionPaused && !userPaused && !temporarilyPaused && !pointerInside && !focusInside && inViewport && !document.hidden;
     }
 
     function scheduleAutoplay() {
@@ -321,6 +366,17 @@
       resumeAfterInteraction();
     });
 
+    const cancelUnfinishedTouch = () => {
+      if (!trackingPointer) return;
+      trackingPointer = false;
+      horizontalDragging = false;
+      track.classList.remove("is-dragging");
+      resumeAfterInteraction();
+    };
+    document.addEventListener("touchend", cancelUnfinishedTouch, { passive: true });
+    document.addEventListener("touchcancel", cancelUnfinishedTouch, { passive: true });
+    window.addEventListener("blur", cancelUnfinishedTouch);
+
     // Toques podem gerar eventos de mouse de compatibilidade sem um "leave" correspondente.
     // Por isso, a pausa por hover só responde a um ponteiro de mouse realmente capaz de hover.
     carousel.addEventListener("pointerenter", (event) => {
@@ -359,6 +415,7 @@
       scheduleAutoplay();
     });
     document.addEventListener("visibilitychange", () => (document.hidden ? stopAutoplay() : scheduleAutoplay()));
+    document.addEventListener("site-motion-change", (event) => (event.detail.paused ? stopAutoplay() : scheduleAutoplay()));
 
     if ("IntersectionObserver" in window) {
       const observer = new IntersectionObserver(
@@ -372,7 +429,6 @@
       observer.observe(carousel);
     }
 
-    if (reducedMotion) toggle.hidden = true;
     showSlide(0);
     updateToggle();
     scheduleAutoplay();
@@ -736,6 +792,7 @@
   setupCategoryMarquee();
   setupContinuousMarquees();
   setupHeroCarousel();
+  setupMotionControl();
   configureCommercialLinks();
   setupMobileMenu();
   setupSiteSearch();
