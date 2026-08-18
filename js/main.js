@@ -16,7 +16,6 @@
   const toast = document.querySelector("[data-toast]");
   const address = document.querySelector("[data-address]");
   const pendingNote = document.querySelector("#pending-contacts");
-  const floatingWhatsApp = document.querySelector("[data-floating-whatsapp]");
   const motionToggle = document.querySelector("[data-motion-toggle]");
   const motionStorageKey = "7-invernos-motion-paused";
   let toastTimer;
@@ -768,22 +767,6 @@
     elements.forEach((element) => observer.observe(element));
   }
 
-  function setupFloatingWhatsApp() {
-    if (!floatingWhatsApp || !("IntersectionObserver" in window)) return;
-
-    const visibility = new Map();
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => visibility.set(entry.target, entry.isIntersecting));
-      floatingWhatsApp.classList.toggle("is-hidden", Array.from(visibility.values()).some(Boolean));
-    });
-    [document.querySelector("#contato"), document.querySelector(".site-footer")]
-      .filter(Boolean)
-      .forEach((element) => {
-        visibility.set(element, false);
-        observer.observe(element);
-      });
-  }
-
   document.querySelectorAll("[data-current-year]").forEach((element) => {
     element.textContent = new Date().getFullYear();
   });
@@ -799,5 +782,4 @@
   setupActiveNavigation();
   document.querySelectorAll("[data-carousel]").forEach(setupCarousel);
   setupRevealAnimations();
-  setupFloatingWhatsApp();
 })();

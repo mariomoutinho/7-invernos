@@ -13,10 +13,10 @@
       document.documentElement.classList.add("js");
     </script>
     <link rel="icon" type="image/png" sizes="64x64" href="assets/images/optimized/favicon-64.png">
-    <link rel="stylesheet" href="css/styles.css?v=10">
+    <link rel="stylesheet" href="css/styles.css?v=11">
     <script src="js/config.js?v=3" defer></script>
     <script src="js/content.js?v=10" defer></script>
-    <script src="js/main.js?v=10" defer></script>
+    <script src="js/main.js?v=11" defer></script>
   </head>
 
   <body>
@@ -570,9 +570,6 @@
     <footer class="site-footer">
       <div class="container footer-inner">
         <div>
-          <a class="footer-brand" href="#inicio" aria-label="7 Invernos — voltar ao início">
-            <img src="assets/images/optimized/logo-7-invernos.webp" width="240" height="222" alt="7 Invernos">
-          </a>
           <p>Aluguel e venda de roupas de inverno em Recife.</p>
         </div>
         <nav aria-label="Navegação do rodapé">
@@ -580,19 +577,20 @@
           <a href="#orientacao">Orientação</a>
           <a href="#localizacao">Localização</a>
         </nav>
-        <div class="footer-socials" role="group" aria-label="Redes sociais e contato">
-          <a class="social-icon whatsapp" href="#contato" aria-label="Falar no WhatsApp" data-link="whatsapp">
-            <svg viewBox="0 0 24 24"><title>WhatsApp</title><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.5 4.1 1.6 5.9L0 24l6.5-1.7a11.8 11.8 0 0 0 5.6 1.4h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.5-8.4ZM12.2 21.7h-.1a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.9 1 1-3.8-.2-.4a9.8 9.8 0 0 1-1.5-5.2 9.9 9.9 0 0 1 16.8-7 9.8 9.8 0 0 1 2.9 7c0 5.5-4.3 10-9.6 10Zm5.4-7.4c-.3-.1-1.8-.9-2.1-1-.3-.1-.5-.1-.7.2-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1a8 8 0 0 1-2.4-1.5A9 9 0 0 1 9.2 11c-.2-.3 0-.5.1-.6l.5-.6.3-.5c.1-.2 0-.4 0-.5-.1-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3Z" /></svg>
-          </a>
-          <a class="social-icon instagram" href="#contato" aria-label="Abrir Instagram" data-link="instagram">
-            <svg viewBox="0 0 24 24"><title>Instagram</title><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle class="instagram-dot" cx="17.4" cy="6.7" r="1" /></svg>
-          </a>
-        </div>
         <p class="copyright">© <span data-current-year>2026</span> 7 Invernos.</p>
       </div>
     </footer>
 
     <nav class="floating-socials" aria-label="Canais de contato">
+      <a
+        class="floating-social floating-whatsapp"
+        href="#contato"
+        aria-label="Falar no WhatsApp"
+        data-tooltip="Falar no WhatsApp"
+        data-link="whatsapp"
+      >
+        <svg viewBox="0 0 24 24"><title>WhatsApp</title><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.5 4.1 1.6 5.9L0 24l6.5-1.7a11.8 11.8 0 0 0 5.6 1.4h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.5-8.4ZM12.2 21.7h-.1a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.9 1 1-3.8-.2-.4a9.8 9.8 0 0 1-1.5-5.2 9.9 9.9 0 0 1 16.8-7 9.8 9.8 0 0 1 2.9 7c0 5.5-4.3 10-9.6 10Zm5.4-7.4c-.3-.1-1.8-.9-2.1-1-.3-.1-.5-.1-.7.2-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1a8 8 0 0 1-2.4-1.5A9 9 0 0 1 9.2 11c-.2-.3 0-.5.1-.6l.5-.6.3-.5c.1-.2 0-.4 0-.5-.1-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3Z" /></svg>
+      </a>
       <a
         class="floating-social floating-instagram"
         href="#contato"
@@ -603,16 +601,6 @@
         data-link="instagram"
       >
         <svg viewBox="0 0 24 24"><title>Instagram</title><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle class="instagram-dot" cx="17.4" cy="6.7" r="1" /></svg>
-      </a>
-      <a
-      class="floating-social floating-whatsapp"
-      href="#contato"
-      aria-label="Falar no WhatsApp"
-      data-tooltip="Falar no WhatsApp"
-      data-floating-whatsapp
-      data-link="whatsapp"
-    >
-      <svg viewBox="0 0 24 24"><title>WhatsApp</title><path d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.5 4.1 1.6 5.9L0 24l6.5-1.7a11.8 11.8 0 0 0 5.6 1.4h.1c6.5 0 11.8-5.3 11.8-11.8 0-3.2-1.2-6.1-3.5-8.4ZM12.2 21.7h-.1a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.9 1 1-3.8-.2-.4a9.8 9.8 0 0 1-1.5-5.2 9.9 9.9 0 0 1 16.8-7 9.8 9.8 0 0 1 2.9 7c0 5.5-4.3 10-9.6 10Zm5.4-7.4c-.3-.1-1.8-.9-2.1-1-.3-.1-.5-.1-.7.2-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1a8 8 0 0 1-2.4-1.5A9 9 0 0 1 9.2 11c-.2-.3 0-.5.1-.6l.5-.6.3-.5c.1-.2 0-.4 0-.5-.1-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3Z" /></svg>
       </a>
     </nav>
 
